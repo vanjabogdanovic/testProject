@@ -11,9 +11,20 @@
                     <div class="card-header">
 
                         {{--Profile header--}}
-                        <img style="width:150px; height: 150px; border-radius: 20%;" class="" src="{{url('uploads/'.$user->profile->img_url)}}"
-                             onerror="this.onerror=null;this.src='../img/default.png';">
-                        <p class="text-primary h3 d-inline ml-3"> {{ $user->name  }}'s Profile Information </p>
+                        <div class="position-relative">
+                            @if($user->profile->img_url != null && Auth::user()->id == $user->id)
+                                <button type="button" class="close position-absolute ml-2"
+                                        data-toggle="tooltip" data-placement="top" title="Delete image">
+                                    <form action="{{ route('delete_img', ['id' => $user->id]) }}" method="POST">
+                                        @csrf
+                                        <input type="submit" class="btn btn-danger btn-round mt-2" value="&times;">
+                                    </form>
+                                </button>
+                            @endif
+                            <img style="width:150px; height: 150px; border-radius: 20%;" class="" src="{{url('uploads/'.$user->profile->img_url)}}"
+                                 onerror="this.onerror=null;this.src='../img/default.png';">
+                            <p class="text-primary h3 d-inline ml-3"> {{ $user->name  }}'s Profile Information </p>
+                        </div>
 
                     </div>
                     <div class="card-body">

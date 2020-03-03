@@ -4,7 +4,8 @@
         @foreach($post->categories as $category)
             <div class="d-inline">
                 <form action="{{ route('home') }}" method="GET" class="d-inline">
-                    <button type="submit" class="btn btn-sm btn-labeled btn-info" value="{{ $category->id }}" name="selectCategories[]">
+                    <button type="submit" class="btn btn-sm btn-labeled btn-info"
+                            value="{{ $category->id }}" name="selectCategories[]">
                         <span class="btn-label text-white"><i class="fas fa-hashtag"></i></span>
                         <span class="text-white">
                             {{ $category->name }}

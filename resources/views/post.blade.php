@@ -25,7 +25,7 @@
                         <div class="info-form mb-5">
 
                             @if($post->user->id == Auth::user()->id)
-                            <form action="" method="POST" class="info-form">
+                            <form action="{{ route('edit_post', ['id' => $post->id]) }}" method="POST" class="info-form">
                                 @csrf
                                 <div class="input-group mb-3">
                                     <textarea type="text" name="post_content" class="form-control" aria-describedby="basic-addon2">{{ $post->content }}</textarea>
@@ -60,43 +60,41 @@
                         {{--Show post's comments--}}
                         @if(!empty($post->comments))
                             @foreach($post->comments as $comment)
-                                @if($comment->post_id == $post->id)
-                                    <div class="border bg-light rounded p-3 mb-1">
+                                <div class="border bg-light rounded p-3 mb-1">
 
-                                        {{--Show user's image in comment--}}
-                                        <span class="text-primary h5 d-inline">
-                                            @include('components.user_img', ['postUser' => $comment->user])
-                                            <a href={{ route('profile', ['id' => $comment->user_id]) }}>{{ $comment->user->name }}</a>
-                                        </span>
+                                    {{--Show user's image in comment--}}
+                                    <span class="text-primary h5 d-inline">
+                                        @include('components.user_img', ['postUser' => $comment->user])
+                                        <a href={{ route('profile', ['id' => $comment->user_id]) }}>{{ $comment->user->name }}</a>
+                                    </span>
 
-                                        {{--Delete comment--}}
-                                        @if($comment->user_id == Auth::user()->id)
+                                    {{--Delete comment--}}
+                                    @if($comment->user_id == Auth::user()->id)
                                         <button type="button" class="close">
                                             <form action="{{ route('delete_comment', ['id' => $comment->id]) }}" method="POST">
                                                 @csrf
                                                 <input type="submit" class="btn btn-outline-danger btn-round" value="&times;">
                                             </form>
                                         </button>
-                                        @endif
+                                    @endif
 
-                                        {{--Edit comment content--}}
-                                        @if($comment->user_id == Auth::user()->id)
-                                            <form action="{{ route('edit_comment', ['id' => $comment->id]) }}" method="POST" class="mt-2">
-                                                @csrf
-                                                <div class="input-group mb-3">
-                                                    <textarea type="text" class="form-control" aria-describedby="basic-addon2">{{ $comment->comment_content }}</textarea>
-                                                    <div class="input-group-append">
-                                                        <button class="btn btn-secondary" type="submit">Edit</button>
-                                                    </div>
+                                    {{--Edit comment content--}}
+                                    @if($comment->user_id == Auth::user()->id)
+                                        <form action="{{ route('edit_comment', ['id' => $comment->id]) }}" method="POST" class="mt-2">
+                                            @csrf
+                                            <div class="input-group mb-3">
+                                                <textarea type="text" class="form-control" aria-describedby="basic-addon2" name="comment_content">{{ $comment->comment_content }}</textarea>
+                                                <div class="input-group-append">
+                                                    <button class="btn btn-secondary" type="submit">Edit</button>
                                                 </div>
-                                            </form>
-                                        @else
-                                            <span class="mb-2 ml-2 text-secondary clearfix">{{ $comment->comment_content }}</span>
-                                        @endif
-                                        <small class="text-info"> Created {{ $comment->created_at->diffForHumans() }} </small>
+                                            </div>
+                                        </form>
+                                    @else
+                                        <span class="mb-2 ml-2 text-secondary clearfix">{{ $comment->comment_content }}</span>
+                                    @endif
+                                    <small class="text-info"> Created {{ $comment->created_at->diffForHumans() }} </small>
 
-                                    </div>
-                                @endif
+                                </div>
                             @endforeach
                         @endif
 

@@ -3,12 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Category;
-use App\Comment;
 use App\Http\Requests\CreatePostRequest;
 use App\Http\Requests\EditPostRequest;
 use App\Post;
-use App\Profile;
-use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -45,7 +42,7 @@ class PostController extends Controller {
             $post->categories()->attach($category, ['post_id' => $post->id, 'category_id' => $category]);
         }
 
-        return back()->with('success', 'Post published!');
+        return back()->with('success', 'Post successfully published!');
     }
 
     public function showPost($postId) {
@@ -58,26 +55,20 @@ class PostController extends Controller {
         ]);
     }
 
-    public function editPost(EditPostRequest $request, $postId) {
-        $post = Post::findOrFail($postId);
-        foreach ($post->categories as $category) {
-            $post->categories()->detach($category->id);
-        }
+    public function editPost(EditPostRequest $request, $id) {
+        $post = Post::findOrFail($id);
         $post->content = $request->post_content;
         $post->save();
 
-        $categories = $request->categories;
-        foreach($categories as $category) {
-            $post->categories()->attach($category ,['post_id' => $post->id, 'category_id' => $category]);
-        }
+        $post->categories()->sync($request->categories);
 
-        return back()->with('success', 'Post edited!');
+        return back()->with('success', 'Post successfully edited!');
     }
 
-    public function deletePost($postId) {
-        $post = Post::findOrFail($postId);
+    public function deletePost($id) {
+        $post = Post::findOrFail($id);
         $post->delete();
 
-        return redirect()->route('home')->with('success', 'Post deleted!');
+        return redirect()->route('home')->with('success', 'Post successfully deleted!');
     }
 }

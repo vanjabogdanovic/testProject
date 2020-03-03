@@ -16,15 +16,16 @@ Auth::routes();
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/', 'PostController@index')->name('home');
     Route::post('/home', 'PostController@createPost')->name('create_post');
-    Route::get('/post/{id}', 'PostController@showPost')->name('post');
-    Route::post('/post/{id}', 'PostController@editPost')->name('edit_post');
-    Route::post('/home/{postId}/delete', 'PostController@deletePost')->name('delete_post');
+    Route::get('/posts/{id}', 'PostController@showPost')->name('post');
+    Route::post('/posts/{id}/edit', 'PostController@editPost')->name('edit_post')->middleware('post.owner');
+    Route::post('/posts/{id}/delete', 'PostController@deletePost')->name('delete_post')->middleware('post.owner');
 
-    Route::get('/profile/{id}', 'ProfileController@index')->name('profile');
-    Route::post('/profile/{id}', 'ProfileController@updateProfile')->name('update_profile');
+    Route::get('/profiles/{id}', 'ProfileController@index')->name('profile');
+    Route::post('/profiles/{id}', 'ProfileController@updateProfile')->name('update_profile');
+    Route::post('/image/{id}/delete', 'ProfileController@deleteImg')->name('delete_img');
 
-    Route::post('/post/{id}/comment', 'CommentController@createComment')->name('create_comment');
-    Route::post('/home/post/comment/{id}', 'CommentController@editComment')->name('edit_comment');
-    Route::post('/home/comment/delete/{id}', 'CommentController@deleteComment')->name('delete_comment');
+    Route::post('/comments/{id}/create', 'CommentController@createComment')->name('create_comment');
+    Route::post('/comments/{id}/edit', 'CommentController@editComment')->name('edit_comment')->middleware('comment.owner');
+    Route::post('/comments/{id}/delete', 'CommentController@deleteComment')->name('delete_comment')->middleware('comment.owner');
 });
 

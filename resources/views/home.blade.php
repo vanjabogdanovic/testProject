@@ -82,7 +82,9 @@
 
                             {{--Edit post--}}
                             @if(Auth::user()->id == $post->user_id)
-                                <a class="btn btn-outline-secondary edit-btn float-right" href={{ route('post', ['id' => $post->id]) }}>
+                                <a class="btn btn-outline-secondary edit-btn float-right"
+                                   href="{{ route('post', ['id' => $post->id]) }}"
+                                   data-toggle="tooltip" data-placement="top" title="Edit post">
                                     <i class="fas fa-edit"></i>
                                 </a>
                             @endif

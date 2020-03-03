@@ -21,7 +21,7 @@ class CommentController extends Controller {
             $comment->save();
         }
 
-        return back()->with('success', 'Comment published!');
+        return back()->with('success', 'Comment successfully published!');
     }
 
     public function editComment(EditCommentRequest $request, $id) {
@@ -29,13 +29,13 @@ class CommentController extends Controller {
         $comment->comment_content = $request->comment_content;
         $comment->save();
 
-        return back()->with('success', 'Comment edited!');
+        return back()->with('success', 'Comment successfully edited!');
     }
 
     public function deleteComment($id) {
         $comment = Comment::findOrFail($id);
         $comment->delete();
 
-        return back()->with('success', 'Comment deleted!');
+        return back()->with('success', 'Comment successfully deleted!');
     }
 }
