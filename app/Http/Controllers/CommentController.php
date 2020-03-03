@@ -11,13 +11,15 @@ use Illuminate\Support\Facades\Auth;
 
 class CommentController extends Controller {
 
-    public function createComment(CreateCommentRequest $request, $postId) {
-        $userId = Auth::user()->id;
-        $comment = new Comment();
-        $comment->comment_content = $request->comment_content;
-        $comment->user_id = $userId;
-        $comment->post_id = $postId;
-        $comment->save();
+    public function createComment(CreateCommentRequest $request, $id) {
+        if(Post::findOrFail($id)) {
+            $userId = Auth::user()->id;
+            $comment = new Comment();
+            $comment->comment_content = $request->comment_content;
+            $comment->user_id = $userId;
+            $comment->post_id = $id;
+            $comment->save();
+        }
 
         return back()->with('success', 'Comment published!');
     }
@@ -34,6 +36,6 @@ class CommentController extends Controller {
         $comment = Comment::findOrFail($id);
         $comment->delete();
 
-        return back()->with('alert', 'Comment deleted!');
+        return back()->with('success', 'Comment deleted!');
     }
 }

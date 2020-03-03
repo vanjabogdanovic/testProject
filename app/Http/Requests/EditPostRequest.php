@@ -12,7 +12,8 @@ class EditPostRequest extends FormRequest {
 
     public function rules() {
         return [
-            "post_content" => "required"
+            "post_content" => "required|min:10",
+            "categories" => "required"
         ];
     }
 }

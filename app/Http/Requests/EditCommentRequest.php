@@ -12,7 +12,7 @@ class EditCommentRequest extends FormRequest {
 
     public function rules() {
         return [
-            "comment_content" => "required"
+            "comment_content" => "required|min:3"
         ];
     }
 }

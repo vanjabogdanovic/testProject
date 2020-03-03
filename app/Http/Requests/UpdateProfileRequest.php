@@ -11,12 +11,12 @@ class UpdateProfileRequest extends FormRequest {
 
     public function rules(){
         return [
-            "first_name" => "nullable",
-            "last_name" => "nullable",
+            "first_name" => "nullable|min:2",
+            "last_name" => "nullable|min:2",
             "dob" => "nullable",
             "gender" => "nullable",
-            "bio" => "nullable",
-            "img" => "nullable"
+            "bio" => "nullable|min:10",
+            "img" => "nullable",
         ];
     }
 }

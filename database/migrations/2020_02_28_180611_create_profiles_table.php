@@ -9,14 +9,16 @@ class CreateProfilesTable extends Migration {
     public function up() {
         Schema::create('profiles', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->bigInteger('user_id')->unsigned();
             $table->string('first_name')->nullable();
             $table->string('last_name')->nullable();
             $table->date('dob')->nullable();
             $table->string('gender')->nullable();
             $table->text('bio')->nullable();
             $table->string('img_url')->nullable();
-            $table->integer('user_id');
             $table->timestamps();
+
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

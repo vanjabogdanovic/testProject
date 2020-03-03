@@ -11,14 +11,10 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
 Auth::routes();
 
 Route::group(['middleware' => 'auth'], function () {
-    Route::get('/home', 'PostController@index')->name('home');
+    Route::get('/', 'PostController@index')->name('home');
     Route::post('/home', 'PostController@createPost')->name('create_post');
     Route::get('/post/{id}', 'PostController@showPost')->name('post');
     Route::post('/post/{id}', 'PostController@editPost')->name('edit_post');
@@ -27,7 +23,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/profile/{id}', 'ProfileController@index')->name('profile');
     Route::post('/profile/{id}', 'ProfileController@updateProfile')->name('update_profile');
 
-    Route::post('/home/{postId}', 'CommentController@createComment')->name('create_comment');
+    Route::post('/post/{id}/comment', 'CommentController@createComment')->name('create_comment');
     Route::post('/home/post/comment/{id}', 'CommentController@editComment')->name('edit_comment');
     Route::post('/home/comment/delete/{id}', 'CommentController@deleteComment')->name('delete_comment');
 });

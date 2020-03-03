@@ -18,6 +18,36 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+    <style>
+        .btn-round {
+            border-radius: 50%;
+            padding: 0px 7px;
+        }
+        .edit-btn {
+            border-radius: 50%;
+            font-size: 10px;
+            padding: 4px 5.75px;
+            margin-top: 7px;
+            margin-right: 5px;
+        }
+        .btn-label {
+            position: relative;
+            left: -6px;
+            display: inline-block;
+            padding: 2px 4px;
+            background: rgba(0,0,0,0.15);
+            border-radius: 3px 0 0 3px;
+        }
+
+        .btn-labeled {
+            padding-top: 0;
+            padding-bottom: 0;
+        }
+
+    </style>
 </head>
 <body>
     <div id="app">

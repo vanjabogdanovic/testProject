@@ -4,22 +4,22 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCommentsTable extends Migration {
+class CreateCategoryPostTable extends Migration {
 
     public function up() {
-        Schema::create('comments', function (Blueprint $table) {
+        Schema::create('category_post', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('user_id')->unsigned();
             $table->bigInteger('post_id')->unsigned();
-            $table->text('comment_content');
+            $table->bigInteger('category_id')->unsigned();
             $table->timestamps();
+            $table->unique(array('post_id', 'category_id'));
 
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('post_id')->references('id')->on('posts')->onDelete('cascade');
+            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
         });
     }
 
     public function down() {
-        Schema::dropIfExists('comments');
+        Schema::dropIfExists('category_post');
     }
 }

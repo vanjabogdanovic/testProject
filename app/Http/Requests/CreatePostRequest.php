@@ -24,7 +24,8 @@ class CreatePostRequest extends FormRequest
     public function rules()
     {
         return [
-            "content" => "required",
+            "post_content" => "required|min:10",
+            "categories" => "required"
         ];
     }
 }

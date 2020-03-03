@@ -9,62 +9,100 @@
 
                 <div class="card mb-5 shadow">
                     <div class="card-header">
-                        <h5 class="card-title d-inline text-primary">
-                            <a href="/profile/{{ $postCreator->id }}"> {{ $postCreator->name }}'s</a> post
-                        </h5>
-                        @if(Auth::user()->id == $postCreator->id)
-                            <button type="button" class="close">
-                                <form action="{{ route('delete_post', ['postId' => $post->id]) }}" method="POST">
-                                    @csrf
-                                    <input type="submit" class="btn btn-outline-danger float-right" value="&times;">
-                                </form>
-                            </button>
+
+                        {{--Show post header--}}
+                        @include('components.post_header', ['postUser' => $post->user])
+
+                        {{--Delete post--}}
+                        @if(Auth::user()->id == $post->user->id)
+                            @include('components.delete_post_btn')
                         @endif
+
                     </div>
+
+                    {{--Edit post content--}}
                     <div class="card-body">
                         <div class="info-form mb-5">
-                            @if($postCreator->id == \Illuminate\Support\Facades\Auth::user()->id)
+
+                            @if($post->user->id == Auth::user()->id)
                             <form action="" method="POST" class="info-form">
                                 @csrf
-                                <textarea name="content" class="form-control">{{ $post->content }}</textarea>
-                                <input type="submit" name="edit" value="Edit post" class="btn btn-primary mt-1 mb-5 px-5 float-right">
+                                <div class="input-group mb-3">
+                                    <textarea type="text" name="post_content" class="form-control" aria-describedby="basic-addon2">{{ $post->content }}</textarea>
+                                    <div class="input-group-append">
+                                        <button name="edit" class="btn btn-secondary" type="submit">Edit post</button>
+                                    </div>
+                                </div>
+
+                                {{--Edit categories--}}
+                                @foreach($categoriesAll as $category)
+                                    <button type="button" class="btn btn-sm btn-labeled btn-info ml-1">
+                                    <span class="btn-label text-white pl-2 pt-2">
+                                        <input class="form-check-inline" type="checkbox" name="categories[]" value="{{ $category->id }}"
+                                        @foreach($post->categories as $categoryPost)
+                                            @if($categoryPost->id == $category->id)
+                                                checked
+                                            @endif
+                                        @endforeach
+                                        >
+                                    </span>
+                                        <span class="text-white">{{ $category->name }}</span>
+                                    </button>
+                                @endforeach
                             </form>
                             @else
                                 <div class="d-block mb-2 text-secondary">{{ $post->content }}</div>
                                 <small class="text-info">Post created {{ $post->created_at->diffForHumans() }} </small>
                             @endif
+
                         </div>
-                        @if(!empty($comments))
-                            @foreach($comments as $comment)
+
+                        {{--Show post's comments--}}
+                        @if(!empty($post->comments))
+                            @foreach($post->comments as $comment)
                                 @if($comment->post_id == $post->id)
-                                    <div class="border border-info rounded p-3 mb-1">
-                                        <span class="text-primary h5">
-                                            <a href={{ route('profile', ['id' => $comment->user_id]) }}>{{ $comment->post->user->name }}</a>
+                                    <div class="border bg-light rounded p-3 mb-1">
+
+                                        {{--Show user's image in comment--}}
+                                        <span class="text-primary h5 d-inline">
+                                            @include('components.user_img', ['postUser' => $comment->user])
+                                            <a href={{ route('profile', ['id' => $comment->user_id]) }}>{{ $comment->user->name }}</a>
                                         </span>
-                                        <form action="{{ route('edit_comment', ['id' => $comment->id]) }}" method="POST">
-                                            @csrf
-                                            <textarea name="comment_content" class="mb-2 ml-2 text-secondary clearfix form-control">{{ $comment->comment_content }}</textarea>
-                                            <input type="submit" value="Edit" class="btn btn-outline-secondary border-0 float-right mr-1">
-                                        </form>
-                                        <small class="text-info">Created {{ $comment->created_at->diffForHumans() }} </small>
-                                        <form action="{{ route('delete_comment', ['id' => $comment->id]) }}" method="POST">
-                                            @csrf
-                                            <input type="submit" value="Delete" class="btn btn-outline-danger border-0 float-right">
-                                        </form>
+
+                                        {{--Delete comment--}}
+                                        @if($comment->user_id == Auth::user()->id)
+                                        <button type="button" class="close">
+                                            <form action="{{ route('delete_comment', ['id' => $comment->id]) }}" method="POST">
+                                                @csrf
+                                                <input type="submit" class="btn btn-outline-danger btn-round" value="&times;">
+                                            </form>
+                                        </button>
+                                        @endif
+
+                                        {{--Edit comment content--}}
+                                        @if($comment->user_id == Auth::user()->id)
+                                            <form action="{{ route('edit_comment', ['id' => $comment->id]) }}" method="POST" class="mt-2">
+                                                @csrf
+                                                <div class="input-group mb-3">
+                                                    <textarea type="text" class="form-control" aria-describedby="basic-addon2">{{ $comment->comment_content }}</textarea>
+                                                    <div class="input-group-append">
+                                                        <button class="btn btn-secondary" type="submit">Edit</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        @else
+                                            <span class="mb-2 ml-2 text-secondary clearfix">{{ $comment->comment_content }}</span>
+                                        @endif
+                                        <small class="text-info"> Created {{ $comment->created_at->diffForHumans() }} </small>
+
                                     </div>
                                 @endif
                             @endforeach
                         @endif
 
-                        <div class="info-form mt-4">
-                            <form action="/home/{{ $post->id }}" method="POST" class="info-form">
-                                @csrf
-                                <div class="input-group">
-                                    <textarea name="comment_content" class="form-control" placeholder="Add comment..." rows="1"></textarea>
-                                    <input type="submit" name="comment" value="Post" class="btn btn-primary mt-1 ml-1 px-5 float-right">
-                                </div>
-                            </form>
-                        </div>
+                        {{--Add comment--}}
+                        @include('components.add_comment')
+
                     </div>
                 </div>
 
